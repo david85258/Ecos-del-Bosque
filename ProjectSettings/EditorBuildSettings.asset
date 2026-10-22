@@ -8,6 +8,21 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MenuPrincipal.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/Scenes/Ajustes.unity
+    guid: d7bb40e0e4a1ffa4cba3ec77bdede043
+  - enabled: 1
+    path: Assets/Scenes/Creditos.unity
+    guid: 17549c0103df30f49afb8ec932001ed8
+  - enabled: 1
+    path: Assets/Scenes/Historia.unity
+    guid: 1ab190732cc3b1e4fb21b287544b340c
+  - enabled: 1
+    path: Assets/Scenes/Instruciones.unity
+    guid: ce1253d38341efb45bf83a828913db95
+  - enabled: 1
+    path: Assets/Scenes/Juego.unity
+    guid: e54630e3ecc7f364196282490b041571
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 1b1c20d82303e4b5781c3ef50ac1449f, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
