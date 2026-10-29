@@ -910,8 +910,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "- Instrucciones:\nEres un investigador de sucesos paranormales enviado a una regi\xF3n forestal donde varias personas han desaparecido en circunstancias inexplicables.\nTu misi\xF3n consiste en investigar los fen\xF3menos, encontrar pruebas, descubrir qu\xE9 entidades habitan el bosque y regresar a la estaci\xF3n forestal con vida. Pero ten cuidado: el bosque no siempre es lo que parece. Los caminos pueden cambiar, las voces pueden enga\xF1arte y algunas presencias pueden imitar a personas que conoces.\n\n- Controles basicos:\nW, A, S, D: moverse.\nRat\xF3n: mirar alrededor.\nMay\xFAs: correr.\nCtrl: agacharse.\nE: interactuar con objetos.\nF: encender o apagar la linterna.\nG: colocar o utilizar una herramienta seleccionada. "
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e265e22a25189e24087f799bf01ad2ab, type: 2}
-  m_sharedMaterial: {fileID: 3322360372079877163, guid: e265e22a25189e24087f799bf01ad2ab, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9bf86c756bc9a9c42b036caba38eefe4, type: 2}
+  m_sharedMaterial: {fileID: 5091463822601613961, guid: 9bf86c756bc9a9c42b036caba38eefe4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -935,8 +935,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
