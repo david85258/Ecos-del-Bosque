@@ -866,8 +866,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1030, y: 50}
+  m_AnchoredPosition: {x: 0, y: -4.17}
+  m_SizeDelta: {x: 962.5, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1328997077
 MonoBehaviour:
@@ -891,8 +891,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "En una regi\xF3n monta\xF1osa aislada se producen desapariciones misteriosas desde hace d\xE9cadas. Los supervivientes cuentan historias sobre caminos que cambian, voces que imitan a personas conocidas y caba\xF1as que aparecen de la nada. Los jugadores forman parte de una unidad independiente que investiga estos sucesos desde una antigua estaci\xF3n forestal, donde preparan sus misiones y analizan las pruebas. A medida que avanzan las investigaciones, descubren que todas las desapariciones est\xE1n relacionadas con un antiguo fen\xF3meno paranormal conocido como El Eco."
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e265e22a25189e24087f799bf01ad2ab, type: 2}
-  m_sharedMaterial: {fileID: 3322360372079877163, guid: e265e22a25189e24087f799bf01ad2ab, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9bf86c756bc9a9c42b036caba38eefe4, type: 2}
+  m_sharedMaterial: {fileID: 5091463822601613961, guid: 9bf86c756bc9a9c42b036caba38eefe4, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -916,8 +916,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50
-  m_fontSizeBase: 50
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
