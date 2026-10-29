@@ -28,6 +28,12 @@ public class PlayerMovement : MonoBehaviour
         Cursor.visible = false;
     }
 
+    void OnDisable()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
     void Update()
     {
         HandleMovement();
