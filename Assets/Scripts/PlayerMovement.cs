@@ -14,15 +14,18 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Camara")]
     [SerializeField] private Transform playerCamera;
-    [SerializeField] private float mouseSensitivity = 0.1f;
+    [SerializeField] private float sensibilidadMin = 0.1f;
+    [SerializeField] private float sensibilidadMax = 0.75f;
 
     private CharacterController controller;
     private float xRotation = 0f;
     private float verticalVelocity;
+    private float mouseSensitivity;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
+        mouseSensitivity = Mathf.Lerp(sensibilidadMin, sensibilidadMax, Ajustes.GetSensibilidad());
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
