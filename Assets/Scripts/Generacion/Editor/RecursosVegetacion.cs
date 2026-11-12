@@ -56,7 +56,7 @@ public static class RecursosVegetacion
         {
             var tex = AssetDatabase.LoadAssetAtPath<Texture2D>($"{CarpetaTexturas}/{h}.png");
             Material mat = CrearMaterial($"{CarpetaMateriales}/{h}.mat", tex, viento: 0.12f, oscurecerBase: 0.45f);
-            CrearPrefab($"{CarpetaPrefabs}/{h}.prefab", mata, mat);
+            CrearPrefab($"{CarpetaPrefabs}/{h}.prefab", mata, mat, sombras: true);
         }
 
         // Hojas: planos en el suelo, sin viento.
@@ -65,7 +65,7 @@ public static class RecursosVegetacion
         hojas.SetFloat("_CantidadVariacion", 0.2f);
         Mesh[] mallas = CrearMallasHojas();
         for (int i = 0; i < mallas.Length; i++)
-            CrearPrefab($"{CarpetaPrefabs}/Hojas_Caidas_{Variantes[i]}.prefab", mallas[i], hojas);
+            CrearPrefab($"{CarpetaPrefabs}/Hojas_Caidas_{Variantes[i]}.prefab", mallas[i], hojas, sombras: false);
 
         AssetDatabase.SaveAssets();
         Debug.Log("Vegetacion: texturas, materiales y prefabs creados en " + CarpetaTexturas + " y " + CarpetaPrefabs);
@@ -497,13 +497,13 @@ public static class RecursosVegetacion
         return nueva;
     }
 
-    private static void CrearPrefab(string ruta, Mesh malla, Material material)
+    private static void CrearPrefab(string ruta, Mesh malla, Material material, bool sombras)
     {
         var go = new GameObject(Path.GetFileNameWithoutExtension(ruta));
         go.AddComponent<MeshFilter>().sharedMesh = malla;
         var render = go.AddComponent<MeshRenderer>();
         render.sharedMaterial = material;
-        render.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+        render.shadowCastingMode = sombras ? UnityEngine.Rendering.ShadowCastingMode.On : UnityEngine.Rendering.ShadowCastingMode.Off;
         render.receiveShadows = true;
         PrefabUtility.SaveAsPrefabAsset(go, ruta);
         Object.DestroyImmediate(go);
