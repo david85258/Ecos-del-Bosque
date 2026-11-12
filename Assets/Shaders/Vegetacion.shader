@@ -210,6 +210,68 @@ Shader "Ecos del Bosque/Vegetacion"
 
         Pass
         {
+            Name "ShadowCaster"
+            Tags { "LightMode" = "ShadowCaster" }
+            ZWrite On
+            ZTest LEqual
+            ColorMask 0
+
+            HLSLPROGRAM
+            #pragma target 3.0
+            #pragma vertex vertSombra
+            #pragma fragment fragSombra
+            #pragma multi_compile_instancing
+            #pragma multi_compile_vertex _ _CASTING_PUNCTUAL_LIGHT_SHADOW
+
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Shadows.hlsl"
+
+            float3 _LightDirection;
+            float3 _LightPosition;
+
+            struct AttributesSombra
+            {
+                float4 positionOS : POSITION;
+                float2 uv : TEXCOORD0;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            struct VaryingsSombra
+            {
+                float4 positionCS : SV_POSITION;
+                float2 uv : TEXCOORD0;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
+            };
+
+            VaryingsSombra vertSombra(AttributesSombra v)
+            {
+                VaryingsSombra o = (VaryingsSombra)0;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_TRANSFER_INSTANCE_ID(v, o);
+
+                float3 origen;
+                float3 posWS = PosicionVegetacion(v.positionOS.xyz, origen); // con viento: la sombra se mueve igual
+            #if _CASTING_PUNCTUAL_LIGHT_SHADOW
+                float3 dirLuz = normalize(_LightPosition - posWS);
+            #else
+                float3 dirLuz = _LightDirection;
+            #endif
+                // Normal hacia la luz: el "normal bias" no deforma los planos finos de la hierba.
+                o.positionCS = ApplyShadowClamping(TransformWorldToHClip(ApplyShadowBias(posWS, dirLuz, dirLuz)));
+                o.uv = TRANSFORM_TEX(v.uv, _BaseMap);
+                return o;
+            }
+
+            half4 fragSombra(VaryingsSombra i) : SV_Target
+            {
+                UNITY_SETUP_INSTANCE_ID(i);
+                clip(SAMPLE_TEXTURE2D(_BaseMap, sampler_BaseMap, i.uv).a * _BaseColor.a - _Cutoff);
+                return 0;
+            }
+            ENDHLSL
+        }
+
+        Pass
+        {
             Name "DepthOnly"
             Tags { "LightMode" = "DepthOnly" }
             ZWrite On
