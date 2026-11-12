@@ -149,6 +149,7 @@ public class GeneradorTerreno : MonoBehaviour
 
         CalcularResultados();
         Generado = true;
+        EjecutarGeneradores();
 
         if (esPreview)
             return;
@@ -156,6 +157,38 @@ public class GeneradorTerreno : MonoBehaviour
         ColocarJugador();
         Debug.Log($"Terreno generado (semilla {semilla}) en {reloj.ElapsedMilliseconds} ms.", this);
         TerrenoGenerado?.Invoke();
+    }
+
+    // ================================================================ Generadores hijos (arboles, vegetacion...)
+
+    /// <summary>Generadores que hay en este objeto o en sus hijos, en orden de ejecucion.</summary>
+    public GeneradorSobreTerreno[] Generadores()
+    {
+        var lista = GetComponentsInChildren<GeneradorSobreTerreno>();
+        Array.Sort(lista, (a, b) => a.Orden.CompareTo(b.Orden));
+        return lista;
+    }
+
+    private void EjecutarGeneradores()
+    {
+        foreach (var g in Generadores())
+        {
+            try
+            {
+                g.Generar(this, semilla);
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e, g);
+            }
+        }
+    }
+
+    /// <summary>Vuelve a ejecutar solo los generadores hijos sobre el terreno actual (sin rehacer el relieve).</summary>
+    public void RegenerarDecoracion()
+    {
+        if (Generado && terrenoActivo)
+            EjecutarGeneradores();
     }
 
     // ================================================================ Consultas para otros generadores
@@ -546,6 +579,9 @@ public class GeneradorTerreno : MonoBehaviour
 
         preview = null;
         Generado = false;
+
+        foreach (var g in GetComponentsInChildren<GeneradorSobreTerreno>(true))
+            g.Limpiar();
 
         if (terreno)
             UnityEditor.SceneVisibilityManager.instance.Show(terreno.gameObject, false);

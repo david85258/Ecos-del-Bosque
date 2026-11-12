@@ -12,6 +12,7 @@ public class GeneradorTerrenoEditor : Editor
 
     private static GeneradorTerreno pendiente;
     private static double momentoActualizar;
+    private static bool pendienteSoloDecoracion;
 
     public override void OnInspectorGUI()
     {
@@ -61,13 +62,25 @@ public class GeneradorTerrenoEditor : Editor
             MessageType.None);
 
         // Regenerar poco despues de cambiar un valor (no en cada pulsacion).
-        if (cambiado && nuevoAuto && generador.HayPreview)
-        {
-            pendiente = generador;
-            momentoActualizar = EditorApplication.timeSinceStartup + 0.4;
-            EditorApplication.update -= ActualizarPendiente;
-            EditorApplication.update += ActualizarPendiente;
-        }
+        if (cambiado)
+            ProgramarPreview(generador, false);
+    }
+
+    public static bool AutoActualizar => EditorPrefs.GetBool(ClaveAutoActualizar, true);
+
+    /// <summary>Regenera la preview un momento despues (si hay preview y esta activa la actualizacion automatica).
+    /// Con soloDecoracion = true no se rehace el relieve, solo arboles/vegetacion/objetos.</summary>
+    public static void ProgramarPreview(GeneradorTerreno generador, bool soloDecoracion)
+    {
+        if (!generador || !generador.HayPreview || !AutoActualizar || Application.isPlaying)
+            return;
+
+        // Si ya habia un cambio de relieve pendiente, no rebajarlo a solo decoracion.
+        pendienteSoloDecoracion = pendiente == generador ? pendienteSoloDecoracion && soloDecoracion : soloDecoracion;
+        pendiente = generador;
+        momentoActualizar = EditorApplication.timeSinceStartup + 0.4;
+        EditorApplication.update -= ActualizarPendiente;
+        EditorApplication.update += ActualizarPendiente;
     }
 
     private static void ActualizarPendiente()
@@ -77,7 +90,11 @@ public class GeneradorTerrenoEditor : Editor
 
         EditorApplication.update -= ActualizarPendiente;
         if (pendiente && !Application.isPlaying)
-            pendiente.GenerarPreview(false);
+        {
+            if (pendienteSoloDecoracion) pendiente.RegenerarDecoracion();
+            else pendiente.GenerarPreview(false);
+            SceneView.RepaintAll();
+        }
         pendiente = null;
     }
 
@@ -109,5 +126,7 @@ public class GeneradorTerrenoEditor : Editor
                 Object.DestroyImmediate(t.gameObject);
             }
         }
+
+        GeneradorArboles.BorrarTemporalesHuerfanos();
     }
 }

@@ -14,20 +14,20 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 10
-  m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_Fog: 1
+  m_FogColor: {r: 0.1254902, g: 0.10980392, b: 0.10980392, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.08
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 1
+  m_AmbientIntensity: 0.15
   m_AmbientMode: 0
-  m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
-  m_HaloStrength: 0.5
+  m_SubtractiveShadowColor: {r: 0.018063342, g: 0.035968747, b: 0.22264141, a: 1}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 82b660520bdecce4daf45d270ec93fe4, type: 2}
+  m_HaloStrength: 0.54
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
   m_HaloTexture: {fileID: 0}
@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 1785782912}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -368,6 +368,133 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 231382614}
   m_CullTransparentMesh: 1
+--- !u!1 &761284129
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 761284130}
+  - component: {fileID: 761284132}
+  - component: {fileID: 761284131}
+  m_Layer: 0
+  m_Name: Test
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &761284130
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761284129}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.58, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1118797936}
+  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+--- !u!114 &761284131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761284129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
+--- !u!108 &761284132
+Light:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761284129}
+  m_Enabled: 1
+  serializedVersion: 13
+  m_Type: 0
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 16.09
+  m_Range: 30
+  m_SpotAngle: 62.860855
+  m_InnerSpotAngle: 0
+  m_CookieSize2D: {x: 0.5, y: 0.5}
+  m_Shadows:
+    m_Type: 1
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 0.195
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+    m_CullingMatrixOverride:
+      e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+    m_UseCullingMatrixOverride: 0
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingLayerMask: 1
+  m_Lightmapping: 4
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 72.59
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_UseBoundingSphereOverride: 0
+  m_UseViewFrustumForShadowCasterCull: 1
+  m_ForceVisible: 0
+  m_ShapeRadius: 0.025
+  m_ShadowAngle: 0
+  m_LightUnit: 1
+  m_LuxAtDistance: 1
+  m_EnableSpotReflector: 1
 --- !u!1 &803267952
 GameObject:
   m_ObjectHideFlags: 0
@@ -491,6 +618,7 @@ GameObject:
   m_Component:
   - component: {fileID: 905949351}
   - component: {fileID: 905949352}
+  - component: {fileID: 905949353}
   m_Layer: 0
   m_Name: GeneradorTerreno
   m_TagString: Untagged
@@ -507,7 +635,7 @@ Transform:
   m_GameObject: {fileID: 905949350}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 574.6649, y: -0.00001, z: 353.02625}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -527,7 +655,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GeneradorTerreno
   semillaAleatoria: 1
   semilla: 12345
-  terreno: {fileID: 0}
+  terreno: {fileID: 1537430055}
   materialTerreno: {fileID: 0}
   tamano: 250
   alturaMaxima: 150
@@ -556,7 +684,185 @@ MonoBehaviour:
   capaRoca: {fileID: 0}
   anguloRocaMin: 28
   anguloRocaMax: 42
-  jugador: {fileID: 0}
+  jugador: {fileID: 1118797936}
+--- !u!114 &905949353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905949350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01c4dead814885947a39622ea1498cec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GeneradorArboles
+  grupos:
+  - nombre: Bosque de abetos
+    activo: 1
+    probabilidad: 1
+    modelos:
+    - modelo: {fileID: -4278054049132968583, guid: 547a0f2704dba9d4ead8dab5054a8745, type: 3}
+      probabilidad: 3
+      escala: {x: 0.85, y: 1.15}
+      radioTronco: 0.35
+      alturaTronco: 6
+    - modelo: {fileID: -87650576349031876, guid: 793ea515fb408454aa27d58a1e169115, type: 3}
+      probabilidad: 2
+      escala: {x: 0.85, y: 1.2}
+      radioTronco: 0.35
+      alturaTronco: 5
+    - modelo: {fileID: 7084347096671286941, guid: 9dd976e46cfb6f342929adf3a5247281, type: 3}
+      probabilidad: 2
+      escala: {x: 0.75, y: 1.05}
+      radioTronco: 0.3
+      alturaTronco: 6
+    - modelo: {fileID: -5144582478590993766, guid: 2bcfe52ac8b77d848abcb82d867886fa, type: 3}
+      probabilidad: 1.5
+      escala: {x: 0.7, y: 1}
+      radioTronco: 0.3
+      alturaTronco: 6
+    - modelo: {fileID: 4049944391207474564, guid: 812cdbb3c4f28fd40b496c66abe9d6e0, type: 3}
+      probabilidad: 0.3
+      escala: {x: 0.85, y: 1.15}
+      radioTronco: 0.3
+      alturaTronco: 6
+    - modelo: {fileID: 5430496190872073520, guid: 872dbf800d4002d42856faae07e90d5e, type: 3}
+      probabilidad: 0.3
+      escala: {x: 0.8, y: 1.2}
+      radioTronco: 0.6
+      alturaTronco: 4
+    - modelo: {fileID: 4476299092472212295, guid: ab68c2030be380f42b23e06829d6b6bb, type: 3}
+      probabilidad: 0.3
+      escala: {x: 0.8, y: 1.2}
+      radioTronco: 0
+      alturaTronco: 0
+  - nombre: Pinar
+    activo: 1
+    probabilidad: 1
+    modelos:
+    - modelo: {fileID: 271425244894997835, guid: 962fcb5ce9a511a4f8ed97b897bd3a57, type: 3}
+      probabilidad: 3
+      escala: {x: 0.8, y: 1.1}
+      radioTronco: 0.35
+      alturaTronco: 6
+    - modelo: {fileID: -5022883167005753484, guid: d695941b20f1af14ea609eb7727cb87c, type: 3}
+      probabilidad: 2
+      escala: {x: 0.85, y: 1.15}
+      radioTronco: 0.35
+      alturaTronco: 5
+    - modelo: {fileID: -9006525523522101197, guid: 5acd31f23069f8042b6abb92922c0ffb, type: 3}
+      probabilidad: 2
+      escala: {x: 0.85, y: 1.15}
+      radioTronco: 0.35
+      alturaTronco: 5
+    - modelo: {fileID: -5841390928767442803, guid: a3af3d1873dc82f439428b1815bef5dd, type: 3}
+      probabilidad: 1
+      escala: {x: 0.8, y: 1.1}
+      radioTronco: 0.45
+      alturaTronco: 5
+    - modelo: {fileID: -6807978311376011390, guid: 6ad8ba18081f22f4ba0f0574b1010ae6, type: 3}
+      probabilidad: 0.3
+      escala: {x: 0.85, y: 1.15}
+      radioTronco: 0.3
+      alturaTronco: 6
+    - modelo: {fileID: 5430496190872073520, guid: 872dbf800d4002d42856faae07e90d5e, type: 3}
+      probabilidad: 0.3
+      escala: {x: 0.8, y: 1.2}
+      radioTronco: 0.6
+      alturaTronco: 4
+    - modelo: {fileID: 4476299092472212295, guid: ab68c2030be380f42b23e06829d6b6bb, type: 3}
+      probabilidad: 0.3
+      escala: {x: 0.8, y: 1.2}
+      radioTronco: 0
+      alturaTronco: 0
+  - nombre: Bosque seco
+    activo: 1
+    probabilidad: 0.7
+    modelos:
+    - modelo: {fileID: -3134227731593773807, guid: 5e58bd9aa9ac56f4c9ece71096672743, type: 3}
+      probabilidad: 2
+      escala: {x: 0.8, y: 1.1}
+      radioTronco: 0.5
+      alturaTronco: 5
+    - modelo: {fileID: 7447401277751784173, guid: be623e878c5dcca4b92b102ff1ad1a09, type: 3}
+      probabilidad: 1
+      escala: {x: 0.75, y: 1}
+      radioTronco: 0.7
+      alturaTronco: 5
+    - modelo: {fileID: 8298895504669937713, guid: 046b626c7a052a746971cc127d87b762, type: 3}
+      probabilidad: 1.5
+      escala: {x: 0.75, y: 1}
+      radioTronco: 0.5
+      alturaTronco: 5
+    - modelo: {fileID: 3673486929131149038, guid: 8aa2d9200d9cf9d44a3141e1dc188e47, type: 3}
+      probabilidad: 1.5
+      escala: {x: 0.9, y: 1.25}
+      radioTronco: 0.45
+      alturaTronco: 4
+    - modelo: {fileID: 4049944391207474564, guid: 812cdbb3c4f28fd40b496c66abe9d6e0, type: 3}
+      probabilidad: 0.7
+      escala: {x: 0.85, y: 1.15}
+      radioTronco: 0.3
+      alturaTronco: 6
+    - modelo: {fileID: -6807978311376011390, guid: 6ad8ba18081f22f4ba0f0574b1010ae6, type: 3}
+      probabilidad: 0.7
+      escala: {x: 0.85, y: 1.15}
+      radioTronco: 0.3
+      alturaTronco: 6
+    - modelo: {fileID: 5430496190872073520, guid: 872dbf800d4002d42856faae07e90d5e, type: 3}
+      probabilidad: 0.6
+      escala: {x: 0.8, y: 1.2}
+      radioTronco: 0.6
+      alturaTronco: 4
+    - modelo: {fileID: 4476299092472212295, guid: ab68c2030be380f42b23e06829d6b6bb, type: 3}
+      probabilidad: 0.5
+      escala: {x: 0.8, y: 1.2}
+      radioTronco: 0
+      alturaTronco: 0
+  - nombre: Pantano
+    activo: 1
+    probabilidad: 0.4
+    modelos:
+    - modelo: {fileID: 430431676792149052, guid: ef9a6b9471f54ae498c79b817c7e77a2, type: 3}
+      probabilidad: 2
+      escala: {x: 0.85, y: 1.15}
+      radioTronco: 0.5
+      alturaTronco: 5
+    - modelo: {fileID: -9073829711470482030, guid: ac93c6d39b0772048884db7918b6d7df, type: 3}
+      probabilidad: 2
+      escala: {x: 0.8, y: 1.1}
+      radioTronco: 0.6
+      alturaTronco: 5
+    - modelo: {fileID: 3673486929131149038, guid: 8aa2d9200d9cf9d44a3141e1dc188e47, type: 3}
+      probabilidad: 0.5
+      escala: {x: 0.9, y: 1.2}
+      radioTronco: 0.45
+      alturaTronco: 4
+    - modelo: {fileID: 4476299092472212295, guid: ab68c2030be380f42b23e06829d6b6bb, type: 3}
+      probabilidad: 0.6
+      escala: {x: 0.8, y: 1.2}
+      radioTronco: 0
+      alturaTronco: 0
+    - modelo: {fileID: 5430496190872073520, guid: 872dbf800d4002d42856faae07e90d5e, type: 3}
+      probabilidad: 0.4
+      escala: {x: 0.8, y: 1.2}
+      radioTronco: 0.6
+      alturaTronco: 4
+  modoGrupos: 1
+  tamanoZonas: 300
+  separacion: 7
+  densidad: 0.8
+  variacionDensidad: 0.6
+  escalaManchas: 90
+  pendienteMaxima: 32
+  margenClaros: 3
+  hundimiento: 0.15
+  variacionColor: 0.15
+  distanciaDibujado: 400
+  distanciaBillboard: 120
+  maximoArbolesCompletos: 2000
+  colisiones: 1
 --- !u!1 &1118797932
 GameObject:
   m_ObjectHideFlags: 0
@@ -648,6 +954,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2069777020}
+  - {fileID: 761284130}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &1118797937
@@ -740,7 +1047,7 @@ Terrain:
   m_GameObject: {fileID: 1537430053}
   m_Enabled: 1
   serializedVersion: 6
-  m_TerrainData: {fileID: 15600000, guid: 8954c415e8f23a947baa952307699008, type: 2}
+  m_TerrainData: {fileID: 0}
   m_TreeDistance: 5000
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5
@@ -815,14 +1122,14 @@ Light:
   m_Enabled: 1
   serializedVersion: 13
   m_Type: 1
-  m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Color: {r: 0.14202203, g: 0.14804396, b: 0.23018861, a: 1}
+  m_Intensity: 0.05
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
-    m_Type: 2
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
