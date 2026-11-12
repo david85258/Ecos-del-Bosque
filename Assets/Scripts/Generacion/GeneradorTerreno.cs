@@ -93,7 +93,8 @@ public class GeneradorTerreno : MonoBehaviour
 
     // ---------------------------------------------------------------- Datos internos
 
-    private const int Hierba = 0, Hojarasca = 1, Roca = 2;
+    /// <summary>Indices de las capas de textura del terreno (los usa tambien GeneradorVegetacion).</summary>
+    public const int Hierba = 0, Hojarasca = 1, Roca = 2;
     private static TerrainLayer[] capasGeneradas;
 
     private Ruido ruido;

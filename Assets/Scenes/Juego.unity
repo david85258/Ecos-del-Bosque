@@ -394,12 +394,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 761284129}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.58, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1118797936}
+  m_Father: {fileID: 2069777020}
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &761284131
 MonoBehaviour:
@@ -443,7 +443,7 @@ Light:
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 16.09
   m_Range: 30
-  m_SpotAngle: 62.860855
+  m_SpotAngle: 79.560585
   m_InnerSpotAngle: 0
   m_CookieSize2D: {x: 0.5, y: 0.5}
   m_Shadows:
@@ -619,6 +619,7 @@ GameObject:
   - component: {fileID: 905949351}
   - component: {fileID: 905949352}
   - component: {fileID: 905949353}
+  - component: {fileID: 905949354}
   m_Layer: 0
   m_Name: GeneradorTerreno
   m_TagString: Untagged
@@ -863,6 +864,112 @@ MonoBehaviour:
   distanciaBillboard: 120
   maximoArbolesCompletos: 2000
   colisiones: 1
+--- !u!114 &905949354
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905949350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0059c5415f7d2e04c8581a98771fb69c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GeneradorVegetacion
+  hierbas: []
+  detalles:
+  - nombre: Hierba corta (alfombra)
+    activo: 1
+    modelo: {fileID: 1061657286816005832, guid: b1e2dd7b252470e46a02ea290a5feda7, type: 3}
+    ancho: {x: 0.45, y: 0.7}
+    alto: {x: 0.28, y: 0.45}
+    alinearAlSuelo: 0.25
+    suelo: 0
+    densidad: 8
+    cobertura: 1
+    escalaManchas: 20
+  - nombre: Hierba alta
+    activo: 1
+    modelo: {fileID: 2551789077763174585, guid: 1c9af011dcb59c841a57c0a7ecce68a3, type: 3}
+    ancho: {x: 0.55, y: 0.85}
+    alto: {x: 0.5, y: 0.85}
+    alinearAlSuelo: 0.15
+    suelo: 0
+    densidad: 2.5
+    cobertura: 0.6
+    escalaManchas: 25
+  - nombre: Hierba con flores
+    activo: 1
+    modelo: {fileID: 5953307182013642158, guid: 2fedddc42ec3a5f4e8dc6a919907b851, type: 3}
+    ancho: {x: 0.4, y: 0.6}
+    alto: {x: 0.35, y: 0.55}
+    alinearAlSuelo: 0.2
+    suelo: 0
+    densidad: 1
+    cobertura: 0.35
+    escalaManchas: 20
+  - nombre: Hierba bajo los arboles
+    activo: 1
+    modelo: {fileID: 1061657286816005832, guid: b1e2dd7b252470e46a02ea290a5feda7, type: 3}
+    ancho: {x: 0.35, y: 0.55}
+    alto: {x: 0.2, y: 0.35}
+    alinearAlSuelo: 0.25
+    suelo: 1
+    densidad: 2.5
+    cobertura: 0.6
+    escalaManchas: 15
+  - nombre: Hojas caidas A
+    activo: 1
+    modelo: {fileID: 1575958974396054135, guid: ebd5a0edc8195ba4c8ed8505925f11f2, type: 3}
+    ancho: {x: 0.55, y: 1.05}
+    alto: {x: 0.6, y: 1.4}
+    alinearAlSuelo: 1
+    suelo: 1
+    densidad: 0.6
+    cobertura: 0.9
+    escalaManchas: 15
+  - nombre: Hojas caidas B
+    activo: 1
+    modelo: {fileID: 249425680856597292, guid: d700d5d7c061e71479afe76c3e979337, type: 3}
+    ancho: {x: 0.55, y: 1.05}
+    alto: {x: 0.6, y: 1.4}
+    alinearAlSuelo: 1
+    suelo: 1
+    densidad: 0.6
+    cobertura: 0.9
+    escalaManchas: 15
+  - nombre: Hojas caidas C
+    activo: 1
+    modelo: {fileID: 8013443555377863970, guid: e2ee81a7960ba5a4d8bf2fb044fdec5f, type: 3}
+    ancho: {x: 0.55, y: 1.05}
+    alto: {x: 0.6, y: 1.4}
+    alinearAlSuelo: 1
+    suelo: 1
+    densidad: 0.6
+    cobertura: 0.9
+    escalaManchas: 15
+  - nombre: Hojas caidas D
+    activo: 1
+    modelo: {fileID: 3411093830674737009, guid: 70803985db004eb44a284b2699bca5a0, type: 3}
+    ancho: {x: 0.55, y: 1.05}
+    alto: {x: 0.6, y: 1.4}
+    alinearAlSuelo: 1
+    suelo: 1
+    densidad: 0.6
+    cobertura: 0.9
+    escalaManchas: 15
+  resolucion: 1024
+  pendienteMaxima: 35
+  radioLibreCasa: 9
+  hojarascaBajoArboles: 1
+  radioHojarasca: 4.5
+  intensidadHojarasca: 0.85
+  fuerzaViento: 0.35
+  cantidadViento: 0.4
+  velocidadViento: 0.35
+  tinteViento: {r: 0.75, g: 0.8, b: 0.65, a: 1}
+  distanciaDibujado: 60
+  densidadGlobal: 1
 --- !u!1 &1118797932
 GameObject:
   m_ObjectHideFlags: 0
@@ -954,7 +1061,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2069777020}
-  - {fileID: 761284130}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &1118797937
@@ -1122,7 +1228,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 13
   m_Type: 1
-  m_Color: {r: 0.14202203, g: 0.14804396, b: 0.23018861, a: 1}
+  m_Color: {r: 0.14117648, g: 0.14901961, b: 0.23137255, a: 1}
   m_Intensity: 0.05
   m_Range: 10
   m_SpotAngle: 30
@@ -1493,7 +1599,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.70000005, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 761284130}
   m_Father: {fileID: 1118797936}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2069777021
