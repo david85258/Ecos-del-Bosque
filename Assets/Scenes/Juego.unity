@@ -149,7 +149,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1786690779}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -395,6 +395,7 @@ GameObject:
   - component: {fileID: 905949352}
   - component: {fileID: 905949353}
   - component: {fileID: 905949354}
+  - component: {fileID: 905949355}
   m_Layer: 0
   m_Name: GeneradorTerreno
   m_TagString: Untagged
@@ -452,9 +453,7 @@ MonoBehaviour:
   irregularidadBorde: 35
   anchoCaida: 15
   alturaFondo: 2
-  radioClaroCasa: 5
   radioClaroInicio: 2
-  distanciaMinimaCasa: 1000
   capaHierba: {fileID: 0}
   capaHojarasca: {fileID: 0}
   capaRoca: {fileID: 0}
@@ -735,7 +734,7 @@ MonoBehaviour:
     escalaManchas: 15
   resolucion: 1024
   pendienteMaxima: 35
-  radioLibreCasa: 9
+  margenEstructuras: 1
   hojarascaBajoArboles: 1
   radioHojarasca: 4.5
   intensidadHojarasca: 0.85
@@ -745,6 +744,44 @@ MonoBehaviour:
   tinteViento: {r: 0.75, g: 0.8, b: 0.65, a: 1}
   distanciaDibujado: 60
   densidadGlobal: 1
+--- !u!114 &905949355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 905949350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efa76ea585e2457458ecd881cc50c7d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GeneradorEstructuras
+  estructuras:
+  - nombre: Casa
+    activo: 1
+    modelo: {fileID: 8771091787928289351, guid: eef9e4381ea542c4ea3689c22f6e19c9, type: 3}
+    cantidad: 1
+    radio: 0
+    claro: 8
+    distanciaMinimaJugador: 100
+    hundimiento: 0.05
+    rotacionAleatoria: 1
+    colisiones: 1
+  - nombre: Pozo
+    activo: 1
+    modelo: {fileID: 8771091787928289351, guid: b07622762620f6c41ac05983ec9814ce, type: 3}
+    cantidad: 1
+    radio: 0
+    claro: 4
+    distanciaMinimaJugador: 100
+    hundimiento: 0.05
+    rotacionAleatoria: 1
+    colisiones: 1
+  pendienteMaxima: 20
+  separacionMinima: 15
+  margenAplanado: 2
+  transicion: 6
+  intentos: 300
 --- !u!1 &1118797932
 GameObject:
   m_ObjectHideFlags: 0
@@ -1325,7 +1362,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1785782913}
   - {fileID: 1118797936}
-  - {fileID: 1786690779}
   - {fileID: 1790396278}
   - {fileID: 1537430056}
   - {fileID: 905949351}
+  - {fileID: 231382615}

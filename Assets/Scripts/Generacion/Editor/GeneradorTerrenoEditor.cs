@@ -58,7 +58,7 @@ public class GeneradorTerrenoEditor : Editor
         EditorGUILayout.HelpBox(
             "La preview usa la semilla actual. Si 'Semilla Aleatoria' esta activo, al dar a Play saldra otro mapa: " +
             "desactivalo para jugar exactamente el de la preview.\n" +
-            "Circulo verde = inicio del jugador. Circulo rojo = claro de la casa.",
+            "Circulo verde = inicio del jugador. Circulos rojos = claros de las estructuras (casa, pozo...).",
             MessageType.None);
 
         // Regenerar poco despues de cambiar un valor (no en cada pulsacion).
@@ -128,5 +128,6 @@ public class GeneradorTerrenoEditor : Editor
         }
 
         GeneradorArboles.BorrarTemporalesHuerfanos();
+        GeneradorEstructuras.BorrarTemporalesHuerfanos();
     }
 }

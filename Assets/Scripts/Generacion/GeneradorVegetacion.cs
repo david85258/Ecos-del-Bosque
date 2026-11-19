@@ -87,8 +87,8 @@ public class GeneradorVegetacion : GeneradorSobreTerreno
     [SerializeField, Range(256, 2048)] private int resolucion = 1024;
     [Tooltip("No sale vegetacion con mas pendiente que esta (grados).")]
     [SerializeField, Range(0f, 90f)] private float pendienteMaxima = 35f;
-    [Tooltip("Radio (m) alrededor del centro de la casa sin vegetacion (para que no atraviese el suelo).")]
-    [SerializeField, Min(0f)] private float radioLibreCasa = 9f;
+    [Tooltip("Distancia (m) sin vegetacion alrededor de las estructuras (casa, pozo...), para que no atraviese el suelo.")]
+    [SerializeField, Min(0f)] private float margenEstructuras = 1f;
 
     [Header("Hojarasca bajo los arboles")]
     [Tooltip("Pinta la textura de hojarasca del terreno alrededor de cada arbol.")]
@@ -368,21 +368,20 @@ public class GeneradorVegetacion : GeneradorSobreTerreno
         return true;
     }
 
-    /// <summary>0..1 por celda: encima de la meseta, sin mucha pendiente y fuera de la casa.</summary>
+    /// <summary>0..1 por celda: encima de la meseta, sin mucha pendiente y fuera de las estructuras.</summary>
     private float[] CalcularZonasAptas(GeneradorTerreno generador, TerrainData datos, int res)
     {
         var apto = new float[res * res];
         Vector3 origen = generador.Terreno.transform.position;
         float tamano = datos.size.x;
         float celda = tamano / res;
-        Vector2 casa = new Vector2(generador.PosicionCasa.x - origen.x, generador.PosicionCasa.z - origen.z);
 
-        // Meseta (usa la API del generador, solo hilo principal).
+        // Meseta y estructuras (usa la API del generador, solo hilo principal).
         for (int z = 0; z < res; z++)
             for (int x = 0; x < res; x++)
             {
                 var p = origen + new Vector3((x + 0.5f) * celda, 0f, (z + 0.5f) * celda);
-                apto[z * res + x] = generador.EnMeseta(p) ? 1f : 0f;
+                apto[z * res + x] = generador.EnMeseta(p) && !generador.BajoEstructura(p, margenEstructuras) ? 1f : 0f;
             }
 
         // Pendiente calculada del mapa de alturas (mas rapido que preguntar celda a celda).
@@ -406,10 +405,7 @@ public class GeneradorVegetacion : GeneradorSobreTerreno
                 float ddz = (alturas[hz + 1, hx] - alturas[hz - 1, hx]) * alto / (2f * celdaAltura);
                 float pendiente = Mathf.Atan(Mathf.Sqrt(ddx * ddx + ddz * ddz)) * Mathf.Rad2Deg;
 
-                float f = SuaveEntre(pendienteMaxima, pendienteMaxima - 8f, pendiente);
-                if (radioLibreCasa > 0f)
-                    f *= SuaveEntre(radioLibreCasa, radioLibreCasa + 2f, Vector2.Distance(new Vector2(wx, wz), casa));
-                apto[i] = f;
+                apto[i] = SuaveEntre(pendienteMaxima, pendienteMaxima - 8f, pendiente);
             }
         });
 

@@ -1,10 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
 /// <summary>
 /// Genera un terreno de bosque aleatorio al iniciar la escena: una meseta con colinas suaves
-/// rodeada de acantilados, un claro aleatorio para la casa y un claro pequeno donde aparece el jugador.
+/// rodeada de acantilados y un claro pequeno donde aparece el jugador.
+/// Las estructuras (casa, pozo...) las pone el GeneradorEstructuras, que aplana el suelo y reserva sus claros aqui.
 ///
 /// Los demas generadores (vegetacion, arboles, objetos) deben leer de aqui
 /// en su Start() o suscribirse a <see cref="TerrenoGenerado"/>.
@@ -57,10 +59,7 @@ public class GeneradorTerreno : MonoBehaviour
     [SerializeField] private float alturaFondo = 2f;
 
     [Header("Claros")]
-    [SerializeField] private float radioClaroCasa = 18f;
     [SerializeField] private float radioClaroInicio = 6f;
-    [Tooltip("Distancia minima (m) entre el jugador y la casa.")]
-    [SerializeField] private float distanciaMinimaCasa = 300f;
 
     [Header("Texturas (opcional; las vacias se generan por codigo)")]
     [SerializeField] private TerrainLayer capaHierba;
@@ -81,15 +80,21 @@ public class GeneradorTerreno : MonoBehaviour
     public Terrain Terreno => terrenoActivo;
     public int Semilla => semilla;
     public float Tamano => tamano;
-    public float RadioClaroCasa => radioClaroCasa;
     public float RadioClaroInicio => radioClaroInicio;
 
     /// <summary>Punto (en el suelo) donde aparece el jugador.</summary>
     public Vector3 PuntoInicio { get; private set; }
-    /// <summary>Centro del claro de la casa (en el suelo).</summary>
-    public Vector3 PosicionCasa { get; private set; }
-    /// <summary>Rotacion aleatoria para la casa.</summary>
-    public Quaternion RotacionCasa { get; private set; }
+
+    /// <summary>Zona reservada por una estructura: sin hierba en radioModelo y sin arboles en radioClaro.</summary>
+    public struct Claro
+    {
+        public Vector3 centro;
+        public float radioModelo;
+        public float radioClaro;
+    }
+
+    /// <summary>Claros reservados por las estructuras en esta generacion.</summary>
+    public IReadOnlyList<Claro> Claros => claros;
 
     // ---------------------------------------------------------------- Datos internos
 
@@ -101,8 +106,10 @@ public class GeneradorTerreno : MonoBehaviour
     private System.Random rng;
     private float[,] alturas;       // [z, x] normalizadas 0..1
     private float[] mascaraMeseta;  // 1 = encima de la meseta, 0 = fondo del acantilado
-    private Vector2 inicioNorm, casaNorm;
+    private Vector2 inicioNorm;
     private Terrain terrenoActivo;
+    private readonly List<Claro> claros = new List<Claro>();
+    private bool alturasModificadas; // true si algun generador ha aplanado el terreno despues de crearlo
 
     void Awake()
     {
@@ -135,11 +142,11 @@ public class GeneradorTerreno : MonoBehaviour
         alturaMaxima = Mathf.Max(alturaMaxima, alturaMeseta + alturaColinas + 1f);
 
         alturas = GenerarRelieve();
-        ElegirPuntosClave();
-        Aplanar(casaNorm, radioClaroCasa, radioClaroCasa * 0.8f);
+        ElegirPuntoInicio();
         Aplanar(inicioNorm, radioClaroInicio, radioClaroInicio);
 
         TerrainData datos = CrearDatos(PintarTexturas());
+        alturasModificadas = false;
 
 #if UNITY_EDITOR
         if (esPreview)
@@ -172,6 +179,14 @@ public class GeneradorTerreno : MonoBehaviour
 
     private void EjecutarGeneradores()
     {
+        // Al regenerar solo la decoracion, deshacer lo que aplanaron las estructuras la vez anterior.
+        if (alturasModificadas)
+        {
+            terrenoActivo.terrainData.SetHeights(0, 0, alturas);
+            alturasModificadas = false;
+        }
+        claros.Clear();
+
         foreach (var g in Generadores())
         {
             try
@@ -222,13 +237,56 @@ public class GeneradorTerreno : MonoBehaviour
         return Muestrear(mascaraMeseta, resolucionAltura, n.x, n.y) > 0.98f;
     }
 
-    /// <summary>True si la posicion esta dentro del claro de la casa o del de inicio (mas un margen).</summary>
+    /// <summary>True si la posicion esta dentro del claro de inicio o del de alguna estructura (mas un margen).</summary>
     public bool EnClaro(Vector3 posicion, float margen = 0f)
     {
-        Vector2 p = new Vector2(posicion.x, posicion.z);
-        return Vector2.Distance(p, new Vector2(PosicionCasa.x, PosicionCasa.z)) < radioClaroCasa + margen ||
-               Vector2.Distance(p, new Vector2(PuntoInicio.x, PuntoInicio.z)) < radioClaroInicio + margen;
+        if (DistanciaPlana(posicion, PuntoInicio) < radioClaroInicio + margen)
+            return true;
+
+        foreach (Claro c in claros)
+            if (DistanciaPlana(posicion, c.centro) < c.radioClaro + margen)
+                return true;
+
+        return false;
     }
+
+    /// <summary>True si la posicion esta debajo de alguna estructura (mas un margen).</summary>
+    public bool BajoEstructura(Vector3 posicion, float margen = 0f)
+    {
+        foreach (Claro c in claros)
+            if (DistanciaPlana(posicion, c.centro) < c.radioModelo + margen)
+                return true;
+
+        return false;
+    }
+
+    /// <summary>Reserva un claro para una estructura. Los arboles y la vegetacion lo respetan.</summary>
+    public void ReservarClaro(Vector3 centro, float radioModelo, float radioClaro) =>
+        claros.Add(new Claro { centro = centro, radioModelo = radioModelo, radioClaro = radioClaro });
+
+    /// <summary>Aplana un circulo del terreno ya creado (lo usan las estructuras).
+    /// Se deshace solo al volver a generar.</summary>
+    public void AplanarZona(Vector3 centro, float radio, float transicion)
+    {
+        TerrainData datos = terrenoActivo.terrainData;
+        int res = resolucionAltura;
+        float celda = tamano / (res - 1);
+        Vector2 n = ANormalizado(centro);
+        float cx = n.x * (res - 1), cz = n.y * (res - 1);
+        int alcance = Mathf.CeilToInt((radio + transicion) / celda) + 1;
+
+        int x0 = Mathf.Max(0, (int)cx - alcance), x1 = Mathf.Min(res - 1, (int)cx + alcance);
+        int z0 = Mathf.Max(0, (int)cz - alcance), z1 = Mathf.Min(res - 1, (int)cz + alcance);
+
+        // Leer solo ese trozo del mapa de alturas, aplanarlo y volver a escribirlo.
+        float[,] trozo = datos.GetHeights(x0, z0, x1 - x0 + 1, z1 - z0 + 1);
+        AplanarCirculo(trozo, cx - x0, cz - z0, radio / celda, transicion / celda);
+        datos.SetHeights(x0, z0, trozo);
+        alturasModificadas = true;
+    }
+
+    private static float DistanciaPlana(Vector3 a, Vector3 b) =>
+        Vector2.Distance(new Vector2(a.x, a.z), new Vector2(b.x, b.z));
 
     /// <summary>True si se puede poner algo ahi: encima de la meseta y fuera de los claros.</summary>
     public bool EsZonaLibre(Vector3 posicion, float margenClaro = 0f) =>
@@ -319,58 +377,41 @@ public class GeneradorTerreno : MonoBehaviour
 
     // ================================================================ Claros
 
-    private void ElegirPuntosClave()
+    private void ElegirPuntoInicio()
     {
         float margenMetros = acantilados
-            ? distanciaAcantilado + irregularidadBorde * 1.2f + anchoCaida + radioClaroCasa + 10f
-            : radioClaroCasa + 20f;
+            ? distanciaAcantilado + irregularidadBorde * 1.2f + anchoCaida + radioClaroInicio + 10f
+            : radioClaroInicio + 20f;
         float margen = Mathf.Clamp(margenMetros / tamano, 0.02f, 0.45f);
 
-        inicioNorm = PuntoAleatorio(margen);
-
-        // La casa en un sitio aleatorio, lo bastante lejos del jugador.
-        casaNorm = PuntoAleatorio(margen);
-        float mejorDistancia = 0f;
-        for (int i = 0; i < 200; i++)
-        {
-            Vector2 candidato = PuntoAleatorio(margen);
-            float distancia = Vector2.Distance(candidato, inicioNorm) * tamano;
-            if (distancia > mejorDistancia)
-            {
-                mejorDistancia = distancia;
-                casaNorm = candidato;
-            }
-            if (distancia >= distanciaMinimaCasa)
-                break;
-        }
-
-        RotacionCasa = Quaternion.Euler(0f, (float)rng.NextDouble() * 360f, 0f);
+        inicioNorm = new Vector2(Mathf.Lerp(margen, 1f - margen, (float)rng.NextDouble()),
+                                 Mathf.Lerp(margen, 1f - margen, (float)rng.NextDouble()));
     }
 
-    private Vector2 PuntoAleatorio(float margen) =>
-        new Vector2(Mathf.Lerp(margen, 1f - margen, (float)rng.NextDouble()),
-                    Mathf.Lerp(margen, 1f - margen, (float)rng.NextDouble()));
-
-    /// <summary>Aplana una zona circular a su altura media, con una transicion suave.</summary>
+    /// <summary>Aplana una zona circular del mapa de alturas a su altura media, con una transicion suave.</summary>
     private void Aplanar(Vector2 centroNorm, float radio, float transicion)
     {
         int res = resolucionAltura;
         float celda = tamano / (res - 1);
-        float cx = centroNorm.x * (res - 1);
-        float cz = centroNorm.y * (res - 1);
-        int alcance = Mathf.CeilToInt((radio + transicion) / celda);
+        AplanarCirculo(alturas, centroNorm.x * (res - 1), centroNorm.y * (res - 1), radio / celda, transicion / celda);
+    }
 
-        int x0 = Mathf.Max(0, Mathf.FloorToInt(cx) - alcance), x1 = Mathf.Min(res - 1, Mathf.CeilToInt(cx) + alcance);
-        int z0 = Mathf.Max(0, Mathf.FloorToInt(cz) - alcance), z1 = Mathf.Min(res - 1, Mathf.CeilToInt(cz) + alcance);
+    /// <summary>Aplana un circulo de h (alturas [z, x]) a su altura media.
+    /// El centro, el radio y la transicion van en celdas del array.</summary>
+    private static void AplanarCirculo(float[,] h, float cx, float cz, float radio, float transicion)
+    {
+        int alcance = Mathf.CeilToInt(radio + transicion);
+        int x0 = Mathf.Max(0, Mathf.FloorToInt(cx) - alcance), x1 = Mathf.Min(h.GetLength(1) - 1, Mathf.CeilToInt(cx) + alcance);
+        int z0 = Mathf.Max(0, Mathf.FloorToInt(cz) - alcance), z1 = Mathf.Min(h.GetLength(0) - 1, Mathf.CeilToInt(cz) + alcance);
 
         float suma = 0f;
         int cuenta = 0;
         for (int z = z0; z <= z1; z++)
             for (int x = x0; x <= x1; x++)
             {
-                float d = Mathf.Sqrt((x - cx) * (x - cx) + (z - cz) * (z - cz)) * celda;
+                float d = Mathf.Sqrt((x - cx) * (x - cx) + (z - cz) * (z - cz));
                 if (d > radio) continue;
-                suma += alturas[z, x];
+                suma += h[z, x];
                 cuenta++;
             }
 
@@ -381,9 +422,9 @@ public class GeneradorTerreno : MonoBehaviour
         for (int z = z0; z <= z1; z++)
             for (int x = x0; x <= x1; x++)
             {
-                float d = Mathf.Sqrt((x - cx) * (x - cx) + (z - cz) * (z - cz)) * celda;
+                float d = Mathf.Sqrt((x - cx) * (x - cx) + (z - cz) * (z - cz));
                 float peso = SuaveEntre(radio + transicion, radio, d);
-                alturas[z, x] = Mathf.Lerp(alturas[z, x], objetivo, peso);
+                h[z, x] = Mathf.Lerp(h[z, x], objetivo, peso);
             }
     }
 
@@ -409,7 +450,7 @@ public class GeneradorTerreno : MonoBehaviour
             }
         });
 
-        Vector2 casa = casaNorm * tamano, inicio = inicioNorm * tamano;
+        Vector2 inicio = inicioNorm * tamano;
         var mapa = new float[ar, ar, 3];
 
         Parallel.For(0, ar, az =>
@@ -424,11 +465,9 @@ public class GeneradorTerreno : MonoBehaviour
                 float fondo = 1f - Muestrear(mascaraMeseta, res, u, v);
                 roca = Mathf.Max(roca, fondo * 0.6f);
 
-                // Manchas de hojarasca bajo el bosque; los claros quedan con hierba.
+                // Manchas de hojarasca bajo el bosque; el claro de inicio queda con hierba.
                 float hojarasca = SuaveEntre(0.42f, 0.58f, ruido.Fbm(wx / 45f + 700f, wz / 45f + 700f, 4));
-                Vector2 p = new Vector2(wx, wz);
-                float claro = Mathf.Max(SuaveEntre(radioClaroCasa * 1.3f, radioClaroCasa * 0.6f, Vector2.Distance(p, casa)),
-                                        SuaveEntre(radioClaroInicio * 1.5f, radioClaroInicio * 0.5f, Vector2.Distance(p, inicio)));
+                float claro = SuaveEntre(radioClaroInicio * 1.5f, radioClaroInicio * 0.5f, Vector2.Distance(new Vector2(wx, wz), inicio));
                 hojarasca *= 1f - claro;
 
                 float suelo = 1f - roca;
@@ -530,7 +569,6 @@ public class GeneradorTerreno : MonoBehaviour
     {
         Vector3 origen = terrenoActivo.transform.position;
         PuntoInicio = EnSuelo(origen + new Vector3(inicioNorm.x * tamano, 0f, inicioNorm.y * tamano));
-        PosicionCasa = EnSuelo(origen + new Vector3(casaNorm.x * tamano, 0f, casaNorm.y * tamano));
     }
 
     private void ColocarJugador()
@@ -647,8 +685,10 @@ public class GeneradorTerreno : MonoBehaviour
         Gizmos.DrawLine(PuntoInicio, PuntoInicio + Vector3.up * 30f);
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(PosicionCasa, radioClaroCasa);
-        Gizmos.DrawLine(PosicionCasa, PosicionCasa + Vector3.up * 30f);
-        Gizmos.DrawRay(PosicionCasa + Vector3.up * 2f, RotacionCasa * Vector3.forward * 8f);
+        foreach (Claro c in claros)
+        {
+            Gizmos.DrawWireSphere(c.centro, c.radioClaro);
+            Gizmos.DrawLine(c.centro, c.centro + Vector3.up * 30f);
+        }
     }
 }
