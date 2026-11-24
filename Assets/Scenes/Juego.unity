@@ -777,6 +777,16 @@ MonoBehaviour:
     hundimiento: 0.05
     rotacionAleatoria: 1
     colisiones: 1
+  - nombre: "tienda de campa\xF1a"
+    activo: 1
+    modelo: {fileID: 8771091787928289351, guid: 217055db85409f142b92fff1b3c3eb77, type: 3}
+    cantidad: 3
+    radio: 0
+    claro: 1
+    distanciaMinimaJugador: 100
+    hundimiento: 0.05
+    rotacionAleatoria: 1
+    colisiones: 1
   pendienteMaxima: 20
   separacionMinima: 15
   margenAplanado: 2
